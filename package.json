@@ -1,0 +1,31 @@
+{
+  "name": "emeteringapi",
+  "version": "1.0.0",
+  "description": "API Server for eMetering",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yogacheung/emetringapi.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "IFS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yogacheung/emeteringapi/issues"
+  },
+  "homepage": "https://github.com/yogacheung/emeteringapi#readme",
+  "dependencies": {
+    "hapi": "^17.5.1",
+    "inert": "^5.1.0",
+    "joi": "^13.3.0",
+    "lout": "^11.0.1",
+    "mysql": "^2.15.0",
+    "nodemailer": "^4.6.5",
+    "vision": "^5.3.2"
+  }
+}
