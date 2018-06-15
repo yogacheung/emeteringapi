@@ -7,6 +7,7 @@ API Server for eMetering
 ### Prerequisites
 
 NodeJS v9.5.0
+
 NPM 5.6.0
 
 ### Installing
@@ -37,14 +38,10 @@ Add additional notes about how to deploy this on a live system
 
 IFS Yoga
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
 * **IFSn**
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License
