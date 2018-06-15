@@ -40,7 +40,7 @@ IFS Yoga
 
 ## Authors
 
-* **IFSn**
+* **IFS**
 
 ## License
 
