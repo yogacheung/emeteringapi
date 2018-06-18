@@ -79,6 +79,7 @@ server.route({
   path: '/login',
   handler: (request, h) => {
     var data = request.payload;
+    //log(data);
     return new Promise((resolve, reject) => {
       db.login(data, function(err, result){
         if (err == null) return resolve(result);
@@ -94,9 +95,10 @@ server.route({
   path: '/updatepw',
   handler: (request, h) => {
     var data = request.payload;
+    //log(data);
     return new Promise((resolve, reject) => {
       db.updatePW(data, function(err, result){
-        if (err == null) return resolve(result);
+        if (err == null) return resolve({"msg":"Success"});
         else return resolve(err);      
       });
     });
@@ -136,7 +138,7 @@ server.route({
     //return startDate;    
     return new Promise((resolve, reject) => {
       db.monthlyReading(startDate, endDate, function(err, list){
-        log(list);
+        //log(list);
         if(err == null) return resolve(list);
         else return resolve(err);
       });    
