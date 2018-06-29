@@ -15,8 +15,8 @@ var log = console.log.bind(console);
 
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'yoga',
-    password: 'yoga@0101',
+    user: 'root',
+    password: 'weshallovercomesomeday',
     database: 'eMeter'
 });
 
@@ -26,6 +26,8 @@ con.connect(function(err) {
     var sql = "INSERT INTO daily_last_reading(Date, Unit, Reading) SELECT date_format(Datetime, '%Y-%m-%d'), Unit, MAX(Reading) FROM readings WHERE Remarks = 'R' AND date_format(Datetime, '%Y-%m-%d') = CURRENT_DATE - INTERVAL 1 DAY GROUP BY Unit;";
     con.query(sql, function (err, result) {
       if (err) throw err;
-      console.log("Result: " + result);
+      //console.log("Result: " + result);
+      con.end();
+      console.log("Close!");
     });
 });
