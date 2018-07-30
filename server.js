@@ -32,7 +32,8 @@ var transporter = nodemailer.createTransport({
 var log = console.log.bind(console);
 const server = Hapi.Server({ 
   port: 3000,
-  host: 'localhost'
+  host: 'localhost',
+  routes: {cors: true}
 });
 
 const init = async () => {
@@ -79,7 +80,7 @@ server.route({
   path: '/login',
   handler: (request, h) => {
     var data = request.payload;
-    //log(data);
+    log(data);
     return new Promise((resolve, reject) => {
       db.login(data, function(err, result){
         if (err == null) return resolve(result);
@@ -100,6 +101,40 @@ server.route({
       db.updatePW(data, function(err, result){
         if (err == null) return resolve({"msg":"Success"});
         else return resolve(err);      
+      });
+    });
+  }
+});
+
+// Reset Password
+server.route({
+  method: 'POST',
+  path: '/resetpw',
+  handler: (request, h) => {
+    var data = request.payload;
+    //log(data);
+    return new Promise((resolve, reject) => {
+      db.updatePW(data, function(err, result){
+        if (err == null) return resolve({"msg":"Success"});
+        else return resolve(err);      
+      });
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////
+/* UNIT LIST */
+///////////////////////////////////////////////////////////
+
+server.route({
+  method: 'GET',
+  path: '/unitlist',
+  handler: (request, h) => {
+    return new Promise((resolve, reject) => {
+      db.unitlist(function(err, list){  
+        //log(list);
+        if(err == null) return resolve(list);
+          else return resolve(err);
       });
     });
   }
@@ -142,6 +177,49 @@ server.route({
         if(err == null) return resolve(list);
         else return resolve(err);
       });    
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////
+/* REPORT */
+///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////
+/* GRAPH */
+///////////////////////////////////////////////////////////
+
+// Gernal Info
+server.route({
+  method: 'GET',
+  path: '/unitinfo/{unit}',
+  handler: (request, h) => {
+    var unit = request.params.unit;    
+    return new Promise((resolve, reject) => {
+      db.unitInfo(unit, function(err, result){  
+        // log(result);
+        if(err == null) return resolve(result);
+          else return resolve(err);
+      });
+    });
+  }
+});
+
+// Last N Days
+server.route({
+  method: 'GET',
+  path: '/lastndays/{id*2}',
+  handler: (request, h) => {
+    var id = request.params.id.split('/');
+    var unit = id[0];
+    var days = id[1];
+    
+    return new Promise((resolve, reject) => {
+      db.lastNDays(unit, days, function(err, result){  
+        //log(result);
+        if(err == null) return resolve(result);
+          else return resolve(err);
+      });
     });
   }
 });
