@@ -28,6 +28,6 @@ con.connect(function(err) {
       if (err) throw err;
       //console.log("Result: " + result);
       con.end();
-      console.log("Close!");
+      console.log("Closed!");
     });
 });
