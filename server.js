@@ -80,7 +80,7 @@ server.route({
   path: '/login',
   handler: (request, h) => {
     var data = request.payload;
-    log(data);
+    //log(data);
     return new Promise((resolve, reject) => {
       db.login(data, function(err, result){
         if (err == null) return resolve(result);
@@ -106,15 +106,15 @@ server.route({
   }
 });
 
-// Reset Password
+// Reset Account to Default
 server.route({
   method: 'POST',
-  path: '/resetpw',
+  path: '/resetaccount',
   handler: (request, h) => {
     var data = request.payload;
     //log(data);
     return new Promise((resolve, reject) => {
-      db.updatePW(data, function(err, result){
+      db.resetAccount(data, function(err, result){
         if (err == null) return resolve({"msg":"Success"});
         else return resolve(err);      
       });
@@ -221,4 +221,20 @@ server.route({
   }
 });
 
+// Last Month
+server.route({
+  method: 'GET',
+  path: '/lastmonth/{unit}',
+  handler: (request, h) => {
+    var unit = request.params.unit;    
+
+    return new Promise((resolve, reject) => {
+      db.unitMonthReading(unit, function(err, result){  
+        //log(result);
+        if(err == null) return resolve(result);
+          else return resolve(err);
+      });
+    });
+  }
+});
 //------------------------ END --------------------------//
