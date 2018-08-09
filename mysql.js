@@ -141,7 +141,7 @@ exports.lastNDays = function(unit, days, callback) {
 
 // Last Month Reading
 exports.unitMonthReading = function(unit, callback) {
-  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', DATE_FORMAT(Date, '%a') AS 'Week', Reading FROM daily_last_reading WHERE Unit = ? AND Date BETWEEN NOW() - INTERVAL 1 MONTH AND NOW() ORDER BY Reading;";
+  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', DATE_FORMAT(Date, '%a') AS 'Week', Reading FROM daily_last_reading WHERE Unit = ? AND Date BETWEEN NOW() - INTERVAL 29 DAY AND NOW() ORDER BY Reading;";
   pool.query(stmt, unit, function(err, result){
     if(err) callback(err, null);
     else callback(null, result);
