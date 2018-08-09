@@ -159,17 +159,34 @@ server.route({
   }
 });
 
-// Montly reading
+// One Day Reading
 server.route({
   method: 'GET',
-  path: '/genreport/{id*2}',  
+  path: '/onedayreport/{day}',  
+  handler: (request, h) => {
+    var cutoffDate = request.params.day;
+    // log(cutoffDate);     
+    return new Promise((resolve, reject) => {
+      db.oneDayReading(cutoffDate, function(err, list){
+        // log(list);
+        if(err == null) return resolve(list);
+        else return resolve(err);
+      });    
+    });
+  }
+});
+
+// One Month Reading
+server.route({
+  method: 'GET',
+  path: '/onemonthreport/{id*2}',  
   handler: (request, h) => {
     var id = request.params.id.split('/');
 
     var startDate = id[0];
     var cutoffDate = id[1];          
     return new Promise((resolve, reject) => {
-      db.genReport(startDate, cutoffDate, function(err, list){
+      db.oneMonthReading(startDate, cutoffDate, function(err, list){
         //log(list);
         if(err == null) return resolve(list);
         else return resolve(err);

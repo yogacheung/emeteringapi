@@ -1,0 +1,12 @@
+[Unit]
+Description=API Server
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /var/www/emeteringapi/index.js
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -86,9 +86,18 @@ exports.currentReading = function(callback) {
   });
 }
 
-// Montly reading
-exports.monthlyReading = function(StartDate, EndDate, callback) {
-  var stmt = "SELECT r1.Date AS StartDate, r2.Date AS EndDate, r1.Unit, r2.Reading - r1.Reading AS Reading FROM daily_last_reading r1, daily_last_reading r2 WHERE r1.Unit = r2.Unit AND (r1.Unit, r1.Date) IN (SELECT Unit, MIN(Date) FROM daily_last_reading WHERE Date BETWEEN ? AND ? GROUP BY Unit) AND r2.Date = ? ORDER BY r1.Unit;";
+// One Day Reading
+exports.oneDayReading = function(EndDate, callback) {
+  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', Reading FROM daily_last_reading WHERE Date = ?;";
+  pool.query(stmt, EndDate, function(err, result){
+    if(err) callback(err, null);
+    else callback(null, result);
+  });
+}
+
+// One Month Reading
+exports.oneMonthReading = function(StartDate, EndDate, callback) {
+  var stmt = "SELECT r1.Unit, DATE_FORMAT(r1.Date, '%d %b %y') AS StartDate, DATE_FORMAT(r2.Date, '%d %b %y') AS EndDate, r2.Reading - r1.Reading AS Reading FROM daily_last_reading r1, daily_last_reading r2 WHERE r1.Unit = r2.Unit AND (r1.Unit, r1.Date) IN (SELECT Unit, MIN(Date) FROM daily_last_reading WHERE Date BETWEEN ? AND ? GROUP BY Unit) AND r2.Date = ? ORDER BY r1.Unit;";
   pool.query(stmt, [StartDate, EndDate, EndDate], function(err, result){
     if(err) callback(err, null);
     else callback(null, result);
@@ -132,7 +141,7 @@ exports.lastNDays = function(unit, days, callback) {
 
 // Last Month Reading
 exports.unitMonthReading = function(unit, callback) {
-  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', DATE_FORMAT(Date, '%a') AS 'Week', Reading FROM `daily_last_reading` WHERE Unit = ? AND Date BETWEEN NOW() - INTERVAL 1 MONTH AND NOW() ORDER BY Date;";
+  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', DATE_FORMAT(Date, '%a') AS 'Week', Reading FROM daily_last_reading WHERE Unit = ? AND Date BETWEEN NOW() - INTERVAL 1 MONTH AND NOW() ORDER BY Reading;";
   pool.query(stmt, unit, function(err, result){
     if(err) callback(err, null);
     else callback(null, result);

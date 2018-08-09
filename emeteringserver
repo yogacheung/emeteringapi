@@ -1,0 +1,43 @@
+server {
+  listen   80;
+  server_name  120.86.116.195;
+  root   /var/www/html;
+  index index.html index.php index.htm;
+  access_log /var/www/html/access.log;
+  error_log  /var/www/html/error.log;
+  
+  location / {
+    try_files $uri $uri/ /index.html;
+    proxy_set_header   Host $http_host;
+  }
+  
+  location /api {
+    rewrite /api/(.*) /$1  break;
+    proxy_pass         http://localhost:3000;
+    proxy_redirect     off;
+    proxy_set_header   Host $http_host;
+  }
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME  /var/www/html$fastcgi_script_name;    
+  }
+  location /phpmyadmin {
+       root /usr/share/;
+       index index.php index.html index.htm;
+       location ~ ^/phpmyadmin/(.+\.php)$ {
+               try_files $uri =404;
+               root /usr/share/;               
+               fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+               fastcgi_index index.php;
+               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+               include fastcgi_params;
+       }
+       location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+               root /usr/share/;
+       }
+   }
+}
