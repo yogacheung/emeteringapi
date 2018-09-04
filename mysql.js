@@ -65,8 +65,16 @@ exports.resetAccount = function(data, callback){
 /* UNIT LIST */
 ///////////////////////////////////////////////////////////
 
-exports.unitlist = function(callback) {
-  var stmt = "SELECT DISTINCT Unit FROM readings;";
+exports.unitList = function(callback) {
+  var stmt = "SELECT Unit_id, Unit FROM unit_info;";
+  pool.query(stmt, function(err, result){
+    if(err) callback(err, null);
+    else callback(null, result);
+  });
+}
+
+exports.unitStatus = function(callback) {
+  var stmt = "SELECT Unit_id, Unit, DATE_FORMAT(Curr_datetime, '%d %b %y %H:%i:%S') AS 'Datetime' FROM unit_info WHERE Prev_datetime = Curr_datetime;";
   pool.query(stmt, function(err, result){
     if(err) callback(err, null);
     else callback(null, result);

@@ -25,21 +25,19 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
-    var sql = "SELECT ID, Unit, Max(Reading) AS Reading FROM readings WHERE Remarks = 'R' GROUP BY Unit;";
-    con.query(sql, function (err, list) {
-      if (err) throw err;
-      //console.log(list);
-    
+    var now = new Date().toISOString().slice(0,10);  
+    console.log(now);  
+    var sql = "SELECT Unit, AVG(Reading) AS 'Avg' FROM readings WHERE Remarks = 'R' AND DATE_FORMAT(Datetime,'%Y-%m-%d') = ? GROUP BY Unit;"; 
+    con.query(sql, now, function (err, list) {
+      if (err) throw err;         
       for(var i in list){
-        if(list[i].Reading > 999999){
-          console.log(list[i].ID, list[i].Reading);        
-          var newsql = "UPDATE readings SET Reading = 0.0 WHERE ID = "+list[i].ID;
-          console.log(list[i].ID, newsql);
-          con.query(newsql, function (err, result) {
-            if (err) throw err;
-            //console.log(result);                                  
-          });
-        }
+      	// console.log(list[i]);
+        // var sql2 = "SELECT * FROM `readings` WHERE Remarks = 'R' AND Reading > ? AND Unit = ? AND DATE_FORMAT(Datetime,'%Y-%m-%d') = ?;"      	
+        var sql2 = "UPDATE readings SET Remarks = 'NR' WHERE Remarks = 'R' AND Reading > ? AND Unit = ? AND DATE_FORMAT(Datetime,'%Y-%m-%d') = ?;";      	
+        con.query(sql2, [list[i].Avg*3, list[i].Unit, now], function (err, res) {
+  	      if (err) throw err; 	
+  	      console.log(res);      
+	    });
       }            
       console.log("Closed!");      
     });

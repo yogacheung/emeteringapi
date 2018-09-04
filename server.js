@@ -131,7 +131,21 @@ server.route({
   path: '/unitlist',
   handler: (request, h) => {
     return new Promise((resolve, reject) => {
-      db.unitlist(function(err, list){  
+      db.unitList(function(err, list){  
+        //log(list);
+        if(err == null) return resolve(list);
+          else return resolve(err);
+      });
+    });
+  }
+});
+
+server.route({
+  method: 'GET',
+  path: '/unitstatus',
+  handler: (request, h) => {
+    return new Promise((resolve, reject) => {
+      db.unitStatus(function(err, list){  
         //log(list);
         if(err == null) return resolve(list);
           else return resolve(err);
