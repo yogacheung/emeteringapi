@@ -112,6 +112,15 @@ exports.oneMonthReading = function(StartDate, EndDate, callback) {
   });
 }
 
+// Range Reading
+exports.rangeReading = function(StartDate, EndDate, callback) {
+  var stmt = "SELECT Unit, DATE_FORMAT(Date, '%d %b %y') AS 'Date', Reading FROM daily_last_reading WHERE Date BETWEEN ? AND ? GROUP BY Unit;";
+  pool.query(stmt, [StartDate, EndDate], function(err, result){
+    if(err) callback(err, null);
+    else callback(null, result);
+  });
+}
+
 ///////////////////////////////////////////////////////////
 /* REPORT */
 ///////////////////////////////////////////////////////////

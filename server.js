@@ -209,6 +209,25 @@ server.route({
   }
 });
 
+// Range Reading
+server.route({
+  method: 'GET',
+  path: '/rangereport/{id*2}',  
+  handler: (request, h) => {
+    var id = request.params.id.split('/');
+
+    var startDate = id[0];
+    var cutoffDate = id[1];          
+    return new Promise((resolve, reject) => {
+      db.rangeReading(startDate, cutoffDate, function(err, list){
+        //log(list);
+        if(err == null) return resolve(list);
+        else return resolve(err);
+      });    
+    });
+  }
+});
+
 ///////////////////////////////////////////////////////////
 /* REPORT */
 ///////////////////////////////////////////////////////////
